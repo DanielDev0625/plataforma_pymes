@@ -23,7 +23,7 @@ from reportlab.lib.pagesizes import letter # type: ignore
 from reportlab.pdfgen import canvas # type: ignore
 
 # // Importacion de los modelos ORM definidos en el modulo interno de la aplicacion //
-import models
+from backend import models
 # // Importacion del motor de base de datos y del generador de sesiones desde el modulo database //
 from backend.database import engine, get_db
 
