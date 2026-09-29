@@ -1,7 +1,8 @@
 import requests
 import streamlit as st
 
-API_URL = "http://127.0.0.1:8000"
+# Lee la URL desde los Secretos de Streamlit o usa directamente la de Render
+API_URL = st.secrets.get("API_URL", "https://plataforma-pymes.onrender.com")
 
 def renderizar_tarjeta_lote(lote):
     with st.expander(f"{lote.get('nombre_producto', 'Lote')} | Estado: {lote.get('estado', 'N/A')}"):

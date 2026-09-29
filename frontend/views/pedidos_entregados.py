@@ -2,7 +2,8 @@ import requests
 import streamlit as st
 from views.lotes_proceso import renderizar_tarjeta_lote
 
-API_URL = "http://127.0.0.1:8000"
+# Lee la URL desde los Secretos de Streamlit o usa directamente la de Render
+API_URL = st.secrets.get("API_URL", "https://plataforma-pymes.onrender.com")
 
 def show_pedidos_entregados():
     st.header("Historico de Pedidos Entregados")

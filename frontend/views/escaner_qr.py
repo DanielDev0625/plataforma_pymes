@@ -3,7 +3,8 @@ import numpy as np
 import requests
 import streamlit as st
 
-API_URL = "http://127.0.0.1:8000"
+# Lee la URL desde los Secretos de Streamlit o usa directamente la de Render
+API_URL = st.secrets.get("API_URL", "https://plataforma-pymes.onrender.com")
 
 def show_escaner_qr():
     st.header("Escaneo y Lectura de Codigos QR")
