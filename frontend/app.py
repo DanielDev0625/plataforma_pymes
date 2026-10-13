@@ -1,6 +1,9 @@
 import os
 import streamlit as st
 
+# Lee la URL desde los Secretos de Streamlit o usa directamente la de Render
+API_URL = st.secrets.get("API_URL", "https://plataforma-pymes.onrender.com")
+
 # Importar las vistas de los modulos
 from views.cadena_custodia import show_cadena_custodia
 from views.escaner_qr import show_escaner_qr
