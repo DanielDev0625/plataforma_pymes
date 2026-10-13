@@ -3,14 +3,12 @@ import numpy as np
 import requests
 import streamlit as st
 
-# Lee la URL desde los Secretos de Streamlit o usa directamente la de Render
-API_URL = st.secrets.get("API_URL", "https://plataforma-pymes.onrender.com")
 
-def show_escaner_qr():
+def show_escaner_qr(API_URL):
     st.header("Escaneo y Lectura de Codigos QR")
     st.caption("Modulo de Trazabilidad Inteligente - NovaTech")
 
-    # Obtener credenciales de la sesion automatica
+    
     usuario = st.session_state.get("usuario_activo", "Carlos Gomez")
     ubicacion = st.session_state.get("ubicacion_estacion", "Planta Principal - Muelle 2")
 
@@ -49,7 +47,7 @@ def show_escaner_qr():
                         if lote_encontrado:
                             st.info(f"Producto: {lote_encontrado.get('nombre_producto')} | Estado Actual: {lote_encontrado.get('estado')}")
                             
-                            # Mostrar metadatos detectados automaticamente
+                            
                             st.caption(f"Registro Automatico -> Operario: **{usuario}** | Punto de Control: **{ubicacion}**")
 
                             with st.form("form_evento_qr"):
@@ -69,7 +67,7 @@ def show_escaner_qr():
                                         "usuario": usuario,
                                         "ubicacion": ubicacion
                                     })
-                                    if res.status_code == 200:
+                                    if res.status_code == 200 or res.status_code == 201:
                                         st.success("Evento registrado correctamente en la cadena de custodia.")
                                         st.rerun()
                                     else:

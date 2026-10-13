@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from sqlalchemy import Column, String, DateTime, Text, ForeignKey
+from sqlalchemy import Column, String, DateTime, Text, ForeignKey, Integer, Float
 from sqlalchemy.orm import relationship
 from backend.database import Base
 
@@ -12,7 +12,7 @@ class Lote(Base):
     descripcion = Column(Text, nullable=True)
     fecha_creacion = Column(DateTime, default=datetime.utcnow)
     hash_actual = Column(String, nullable=True)
-    estado = Column(String, default="Producción")
+    estado = Column(String, default="Produccion")
 
     eventos = relationship("EventoTrazabilidad", back_populates="lote")
 
@@ -29,3 +29,25 @@ class EventoTrazabilidad(Base):
     hash_evento = Column(String, nullable=False)
 
     lote = relationship("Lote", back_populates="eventos")
+
+class Transportista(Base):
+    __tablename__ = "transportistas"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    nombre = Column(String, nullable=False)      # nombre del conductor
+    vehiculo = Column(String, nullable=False)    # tipo de vehiculo (Tractomula, Furgon, ...)
+    modelo = Column(String, nullable=True)       # marca / modelo (Kenworth T800, ...)
+    placa = Column(String, nullable=True)
+    contacto = Column(String, nullable=True)
+
+class ViajeLogistico(Base):
+    __tablename__ = "viajes_logisticos"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    origen = Column(String, nullable=False)
+    destino = Column(String, nullable=False)
+    transportista_id = Column(Integer, ForeignKey("transportistas.id"), nullable=False)
+    estado = Column(String, default="En Ruta")
+    fecha_inicio = Column(DateTime, default=datetime.utcnow)
+    distancia_km = Column(Float, nullable=True)
+    duracion_estimada_h = Column(Float, nullable=True)

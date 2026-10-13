@@ -1,10 +1,8 @@
 import requests
 import streamlit as st
 
-# Lee la URL desde los Secretos de Streamlit o usa directamente la de Render
-API_URL = st.secrets.get("API_URL", "https://plataforma-pymes.onrender.com")
 
-def show_registrar_lote():
+def show_registrar_lote(API_URL):
     st.header("Registrar Nuevo Lote / Pedido de Produccion")
     st.caption("Modulo de Trazabilidad Inteligente - NovaTech")
 
@@ -16,11 +14,12 @@ def show_registrar_lote():
         if submitted:
             if nombre:
                 try:
+                    
                     respuesta = requests.post(
                         f"{API_URL}/lotes", 
                         json={"nombre_producto": nombre, "descripcion": descripcion}
                     )
-                    if respuesta.status_code == 200:
+                    if respuesta.status_code == 200 or respuesta.status_code == 201:
                         data = respuesta.json()
                         st.success(f"Lote/Pedido registrado con exito! ID: {data['lote_id']}")
                     else:

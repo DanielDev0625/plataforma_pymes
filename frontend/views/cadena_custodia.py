@@ -1,14 +1,12 @@
 import requests
 import streamlit as st
 
-# Lee la URL desde los Secretos de Streamlit o usa directamente la de Render
-API_URL = st.secrets.get("API_URL", "https://plataforma-pymes.onrender.com")
-
-def show_cadena_custodia():
+def show_cadena_custodia(API_URL):
     st.header("Cadena de Custodia y Registro de Eventos")
     st.caption("Modulo de Trazabilidad Inteligente - NovaTech")
 
     try:
+
         res_lotes = requests.get(f"{API_URL}/lotes")
         if res_lotes.status_code == 200 and res_lotes.json():
             lotes_activos = [l for l in res_lotes.json() if l.get('estado') != "Entregado a Cliente"]
@@ -32,12 +30,13 @@ def show_cadena_custodia():
                     if sub_ev:
                         if usuario:
                             lote_id = lotes_dict[lote_sel]
+                           
                             res = requests.post(f"{API_URL}/lotes/{lote_id}/eventos", json={
                                 "hito": hito,
                                 "usuario": usuario,
                                 "ubicacion": ubicacion
                             })
-                            if res.status_code == 200:
+                            if res.status_code == 200 or res.status_code == 201:
                                 st.success("Evento registrado correctamente!")
                                 st.rerun()
                             else:

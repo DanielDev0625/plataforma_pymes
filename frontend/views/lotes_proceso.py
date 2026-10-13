@@ -1,10 +1,8 @@
 import requests
 import streamlit as st
 
-# Lee la URL desde los Secretos de Streamlit o usa directamente la de Render
-API_URL = st.secrets.get("API_URL", "https://plataforma-pymes.onrender.com")
 
-def renderizar_tarjeta_lote(lote):
+def renderizar_tarjeta_lote(lote, API_URL):
     with st.expander(f"{lote.get('nombre_producto', 'Lote')} | Estado: {lote.get('estado', 'N/A')}"):
         col1, col2 = st.columns([3, 1])
         with col1:
@@ -28,7 +26,7 @@ def renderizar_tarjeta_lote(lote):
             except Exception:
                 st.caption("QR no disponible")
 
-def show_lotes_proceso():
+def show_lotes_proceso(API_URL):
     st.header("Lotes Activos en Cadena de Suministro")
     st.caption("Modulo de Trazabilidad Inteligente - NovaTech")
 
@@ -38,7 +36,7 @@ def show_lotes_proceso():
             activos = [l for l in res.json() if l.get('estado') != "Entregado a Cliente"]
             if activos:
                 for lote in activos:
-                    renderizar_tarjeta_lote(lote)
+                    renderizar_tarjeta_lote(lote, API_URL)
             else:
                 st.info("No hay lotes en proceso actualmente.")
         else:

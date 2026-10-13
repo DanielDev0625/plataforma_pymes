@@ -9,15 +9,18 @@ from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
-from reportlab.lib.pagesizes import letter  # type: ignore
-from reportlab.pdfgen import canvas  # type: ignore
+from reportlab.lib.pagesizes import letter  
+from reportlab.pdfgen import canvas
 
 from backend import models
 from backend.database import engine, get_db
+from backend.logistica_routes import router as logistica_router
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Plataforma de Operaciones Inteligentes - PyMEs")
+
+app.include_router(logistica_router)
 
 class LoteCreate(BaseModel):
     nombre_producto: str
@@ -33,7 +36,7 @@ def calcular_hash(data: str) -> str:
 
 @app.get("/")
 def read_root():
-    return {"mensaje": "API de la Plataforma iniciada y Base de Datos SQLite conectada"}
+    return {"mensaje": "API de la Plataforma iniciada y Base de Datos conectada"}
 
 # ---- MÓDULO 1: TRAZABILIDAD INTELIGENTE ----
 
